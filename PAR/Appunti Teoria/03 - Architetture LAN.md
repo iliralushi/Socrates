@@ -143,7 +143,7 @@ Il problema principale di Ethernet è la distanza tra gli host. Il problema si r
 **Tipica Architettura LAN**
 Gli switch vengono utilizzati per creare reti LAN multi-layered anche con topologie complesse. Possiamo combinare interfacce con **velocità eterogenea, condivise e dedicate**.
 
-![](Architettura-LAN.jpg)
+![](Images/Architettura-LAN.jpg)
 
 Il difetto principale di questa topologia è il fatto che è soggetta a **single point of failure**. Se un componente smette di funzionare causa la interruzione totale della rete.
 
