@@ -1,5 +1,5 @@
-Appunti del corso di Informatica dell'università Unimore
+Appunti del corso di Informatica - Unimore
 
-UN COMMIT AL GIORNO TOGLIE IL MEDICO DI TORNO ![](Images/Steamhappy.png)
+UN COMMIT AL GIORNO TOGLIE IL MEDICO DI TORNO ![](Steamhappy.png)
 
-![](Images/Providence.gif)
+![](Providence.gif)

@@ -1,1 +1,0 @@
-todo quando mi annoio di par

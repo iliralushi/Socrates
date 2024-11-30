@@ -54,3 +54,26 @@ Uno dei comandi per vedere le impostazioni di routing è route con il -n per dar
 
 Sysctl è un comando utilizzato per modificare parametri del kernel. È temporaneo, per modificarlo permanentemente usiamo nano /etc/systcl.conf. Il comando -p riconfigura il kernel senza dover riavviare il pc.
 
+WLAN
+-----------------------------
+Non vogliamo che le reti locali comunichino con un protocollo H2N. Con la LAN questo non è possibile.
+
+VLAN port-based = vlan che va configurato manualmente e separo i ruoli a seconda dei loro scopi (alcune porte ad alcune vlan ed altre porte a più vlan)
+
+Le vlan riguardano protocolli sulla sicurezza delle reti. Senza vlan le reti funzionano benissimo ugualmente. Testare una vlan = testare certe comunicazioni che NON funzionano non il contrario
+
+
+**NATTING**
+Ogni volta che il router fa NAT modifica l'IP sorgente/destinazione e modifica il checksum. 
+
+Quando un host privato invia un pacchetto all'host pubblico modifica l'ip sorgente dell'host privato in modo da mascherare l'ip e lo rende pubblico
+
+**PAT**: Port address translation, è necessario per condividere pochi indirizzi IP pubblici fra tanti host dotati di indirizzi IP dotati. 
+
+Binding: definisce tutte le regole che il router che fa NAT utilizza per far collegare le informazioni pubbliche con quelle private
+
+SNAT: Il termine per identificare una trasformazione degli indirizzi IP/porte dove il client ha un indirizzo privato, è sottoposto a natting.
+
+DNAT: SNAT ma è il server ad aver un ip privato.
+
+Possiamo avere uno scenario dove abbiamo sia snat che dnat. Sia client che server possono essere nascosti.
