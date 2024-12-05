@@ -61,4 +61,4 @@ Tutti gli standard derivano da una **struttura di base "a stella"**. A partire d
 - **Topologia a Bus**: È formato da un cavo unico con le estremità libere. Viene condiviso da tutti i dispositivi attivi.
 - **Topologia ad Anello**: Funziona similmente alla topologia a bus, l'unica differenza sta nelle estremità, qui vengono intrecciate in modo da formare un anello.
 
-![](Cablaggio-Strutturato.jpg)
+![](../../Images/Cablaggio-Strutturato.jpg)

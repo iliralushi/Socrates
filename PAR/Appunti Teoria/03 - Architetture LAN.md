@@ -86,7 +86,7 @@ Abbiamo diversi dispositivi di reti dipendenti da; topologie di interconnessione
 
 **Switching**
 
-![](Switching.jpeg)
+![](../../Images/Switching.jpeg)
 
 **Metodi di Filtraggio & Inoltro**
 Gli switch **identificano** gli host collegati a ciascuna interfaccia.
@@ -102,7 +102,7 @@ I meccanismi di filtraggio e inoltro diretto consentono l'aumento di **capacità
 
 **Auto-Apprendimento**
 
-![](Self-Learn.jpg)
+![](../../Images/Self-Learn.jpg)
 
 **FASE 1 - C -> D**
 1) C si prepara a mandare il frame a D. C non ha informazioni su D quindi si presta ad inviare il frame ai segmenti 2 e 3 della rete.

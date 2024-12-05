@@ -1,8 +1,8 @@
 **Incapsulamento**
-Una classe può contenere **variabili** di qualsiasi tipo, **metodi** e altre **classi**. L'oggetto **incapsula** stato ed interfaccia di una classe.
+Una classe può contenere **attributi** di qualsiasi tipo, **metodi** e altre **classi**. L'oggetto **incapsula** stato ed interfaccia di una classe.
 
 **Visibilità**
-Le variabili ed i metodi possono essere di tipo
+Le variabili ed i metodi possono essere di tipo:
 - **Private**: Non visibile dall'esterno (attributi).
 - **Public**: Visibile a tutti (metodi).
 - **Protected**: Visbile solo dalle **classi figlie** e dalle classi dello **stesso package**.
@@ -46,8 +46,8 @@ $ java Esempio2
 ```
 
 **Ereditarietà**
-Caratteristica della OOP che definisce nuove classi partendo da classi esistenti. La nuova classe **eredita** tutti gli attributi/metodi della classe originale, ne può aggiungere altri e può **ridefinire** i metodi ereditati.
-- Implementa nuove funzionalità a classi già esistenti.
+Caratteristica della OOP che definisce **nuove classi** partendo da classi esistenti. La nuova classe **eredita** tutti gli attributi e metodi della classe originale. Ne può aggiungere altri e può **ridefinire** i metodi ereditati.
+- Si implementano **nuove funzionalità** a classi già esistenti.
 
 ``` Java
 class Contatore2 extends Contatore
@@ -62,8 +62,8 @@ class Contatore2 extends Contatore
 - **Ereditarietà Monotona**: Si possono aggiungere solo membri, non rimuoverli.
 
 **Costruttori**
-**Non** vengono ereditati dalla classe figlio. Se non viene inserito ne viene aggiunto uno dal **compilatore** (senza parametri) che **richiama** il costruttore senza parametri del padre.
-- Se il costruttore senza parametri non esiste nella superclasse si verifica un errore.
+**Non** vengono ereditati dalla classe figlio. Se non viene inserito ne viene aggiunto uno dal **compilatore** (senza parametri) che **richiama** il costruttore senza parametri della superclasse.
+- In questo caso se il costruttore senza parametri non esiste nella superclasse si verifica un errore.
 
 **Super**
 La keyword `super` ha diverse funzionalità:
@@ -83,11 +83,11 @@ class ContatorePreciso extends Contatore
 ```
 
 **Override**
-- **Attributi**: Sovrascrivere un attributo porta confusione, solitamente non si fa.
-- **Metodi**: Sovrascrivere un metodo è fondamentale per avere un comportamento polimorfico. Il metodo della superclasse è chiamabile attraverso super.
+- **Attributi**: Di solito porta confusione, quindi è una bad practice.
+- **Metodi**: Fondamentale per avere un comportamento polimorfico. Il metodo della superclasse è chiamabile attraverso `super.`
 
 **Gerarchia Classi Java**
-Tutte le classi **ereditano** implicitamente o non da una **classe radice** che raggruppa tutte le definizioni comuni ad ogni oggetto, la classe **Object**.
+Tutte le classi **ereditano** implicitamente o meno da una **classe radice** che raggruppa tutte le definizioni comuni ad ogni oggetto, la classe `Object.`
 
 **Ereditarietà Esempio**
 
@@ -153,7 +153,7 @@ $ java Esempio3
 
 **Compatibilità tra Classi**
 Prendendo come esempio la classe **Contatore**
-- Un contatore **esteso** è un sottotipo della classe originale. Se ho bisogno di un contatore posso usare il contatore esteso escludendo le funzionalità aggiunte.
+- Un contatore esteso è un **sottotipo** della classe originale. Posso usarlo come contatore senza le funzionalità aggiunte. **Classificazione** delle entità.
 
 ``` Java
 // Regola di Conformità
@@ -170,8 +170,12 @@ public static void main(String args[])
 }
 ```
 
-**Altri Usi Ereditarietà**
-Oltre al riutilizzo del codice definisce una relazione **tipo-sottotipo**, quindi una **classificazione** delle entità.
+**Polimorfismo**
+Caratteristica della OOP che permette ad una **classe** di fornire diverse **implementazioni di metodi** inizialmente definiti nella classe base. Si basa su:
+- **Binding Dinamico**: Associazione dinamica tra variabile ed oggetto (tipo `V = A1`).
+- **Operation Dispatching**: Ricerca dinamica dei metodi in memoria.
+- **Overriding**: Sovrascrizione dei metodi in modo da cambiare il comportamento.
+- **Regola di Conformità**: Permette l'assegnamento da superclasse a sottoclasse.
 
 **Polimorfismo Esempio**
 
@@ -225,3 +229,4 @@ $ java Esempio
 // Sono una SeicentoFamiliare e ho 6 posti
 ```
 
+![[../../Images/MemoriaJava.png]]

@@ -1,6 +1,6 @@
 **Livello IP - Stack TCP/IP**
 
-![](IP.png)
+![](../../Images/IP.png)
 
 **Internet - Una Rete Globale**
 L'obiettivo di Internet è connettere un qualsiasi numero di reti (scalabilità) **eterogenee** ed **indipendenti**.
@@ -41,7 +41,7 @@ Lo **spazio degli indirizzi** viene gestito in blocchi di indirizzi. Una rete ge
 - Un blocco di indirizzi può essere assegnato ad una rete locale dove gli indirizzi comunicano a livello H2N.
 - **Approccio Ricorsivo**: Un blocco di indirizzi può essere assegnato ad una rete logica che contiene più reti logiche/locali.
 
-![](Assegnazione-IP.png)
+![](../../Images/Assegnazione-IP.png)
 
 **Classi di Indirizzi IP**
 È uno dei modi per assegnare lo spazio ai campi `<netid> <hostid>.` Si parte dal MSB. Metodo quasi inutilizzato al giorno d'oggi. Le classi sono statiche, c'è bisogno di flessibilità.
@@ -76,7 +76,7 @@ Il router si occupa della survivability della comunicazione. Ha il compito di **
 I pacchetti vengono inoltrati **hop-by-hop**. Conosciamo solo il router successivo a cui verrà inoltrato il pacchetto e non il percorso completo a priori.
 - Il routing non è infallibile. Se un router è sovraccarico possiamo avere la perdita di pacchetti (congestione) oppure ci possono essere errori di routing (cicli di rete).
 
-![](Routing-IP.png)
+![](../../Images/Routing-IP.png)
 
 **Inoltro Hop-By-Hop dei Pacchetti IP**
 L'host che invia il pacchetto all'esterno della rete **locale** deve decidere il router per inviarlo. Viene detto **first-hop router**. Successivamente anche il router deve scegliere un altro router a cui inoltrare il pacchetto detto **next-hop router**.
@@ -103,7 +103,7 @@ Viene effettuato da ogni router. Il **next-hop router** appartiene sempre ad una
 Ogni **host** e ogni **router** hanno una **tabella di routing** composta da un campo destinazione ed un campo metodo. Viene fornito il next-hop per ogni possibile destinazione.
 - Il percorso dei pacchetti viene scelto **hop-by-hop**.
 
-![](Routing-Table.png)
+![](../../Images/Routing-Table.png)
 
 Come esempio creo la tabella per **Rete 1** e **Router 2**
 
