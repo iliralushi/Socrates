@@ -1,54 +1,64 @@
 **Stratificazione SO**
-Un SO moderno è concepito **a strati**. Gli strati formano uno **stack software**, ogni strato è implementato sfruttando le funzioni esclusivamente degli strati inferiori.
+Al giorno d'oggi un SO è progettato **per strati**. Ogni strato viene progettato sfruttando le funzionalità dello strato **precedente**. L'insieme di strati forma uno **stack software**.
 
 ![](../../Images/Stack-Software.png)
 
-**Contenuto Strato Software**
-Uno strato contiene le **funzionalità** e le **strutture dati** idonee per la creazione delle funzionalità degli strati superiori. Si possono implementare in due modi:
-- **Hardware**: Chip ROM, EEPROM...
-- **Software**: Librerie statiche o dinamiche.
+**Contenuto Strato**
+Contiene l'implementazione di tutte le **funzionalità e strutture dati** necessarie per creare lo strato di livello superiore. Esse possono essere implementate in due modi:
+- **Software**:  Uso di librerie statiche/dinamiche.
+- **Hardware**: Uso di chip ROM/EEPROM.
 
-**Implementazione Strato Funzionale**
-Le funzionalità dello strato `m` fanno uso delle funzionalità dello strato `m-1.` In questo caso `fmj` è una funzione pubblica, quindi usabile dallo strato `m+1.` `fmj` può implementare delle funzioni private di supporto visibili **solo** allo strato `m` che possono usare le funzionalità di `m-1.` Il ciclo si ripete per gli **strati superiori**.
+**Generico Strato Funzionale**
+1) Le funzionalità dello strato `m` fanno uso delle funzionalità dello strato `m-1.` Ogni strato ha una parte **pubblica** ed una **privata**. Qui lo strato `m+1` può sfruttare la funzione `fmj.`
+2) Lo strato `m` definisce funzioni **private di supporto** che possono sfruttare le funzioni pubbliche dello strato `m-1` ma non sono visibili allo strato superiore.
+3) I primi due step vengono riapplicati fino all'ultimo strato: le funzioni dello strato `m+1` vengono implementate usando le funzionalità **pubbliche** dello strato `m.` 
+
 
 ![](../../Images/Strato-Funzionale.png)
 ![](../../Images/Strato-Funzionale2.png)
 
 **Vantaggi: Modularità**
-- **Sviluppo**: Estremamente comodo; il primo strato viene progettato senza considerare il sistema, gli altri strati si appoggiano a quello precedente.
-- **Debugging**: Se i `m-1` strati sono corretti ciò vuol dire che l'errore risiede nello strato `m.`
+- **Nello Sviluppo**: Nel primo strato vengono implementate le funzionalità per **interfacciarsi con l'hardware** ed il secondo strato si appoggia alle funzionalità del primo.
+- **Nel Debugging**: Dato che è uno **stack di strati** se i primi `m-1` sono funzionanti vuol dire che il problema risiede nello strato `m.`
 
-**Svantaggi**
-- **Definizione Strati**: Ci sono molti fattori da considerare, rendendo l'implementazione molto complicata in un SO moderno. Un esempio è il meccanismo dello **swapping**. Il sistema del gestore della memoria ha bisogno dei **driver del disco** per crearlo, quindi vengono messi in uno strato **inferiore**.
-- **Efficienza**: Al giorno d'oggi trascurabile. Più strati comportano ritardo dato che c'è una sequenza più lunga di funzioni.
+**Svantaggi: Definizione Strati**
+È difficile definire l'inizio e la fine di uno strato.
+- **ES**: Il sistema di gestione della memoria ha bisogno del driver del disco per implementare il processo di **swapping**. Lo strato dei driver del disco **va collocato al di sotto** dello strato della memoria. In un SO moderno si hanno **moltissimi vincoli** di questo genere.
 
-**SO Basato su Macro Kernel**
-L'insieme dei servizi esegue in **kernel mode** mentre l'insieme delle applicazioni esegue in **user mode**. Le funzionalità essenziali del kernel risiedono in un immagine, viene eseguita durante il **boot** del sistema.
+**Svantaggi: Efficienza**
+L'uso di più strati comporta un **ritardo maggiore** nel servizio per via delle cascate di funzioni più lunghe. Con l'aumento della potenza di calcolo al giorno d'oggi è trascurabile.
+
+**Macro Kernel SO**
+I servizi vengono eseguiti in **kernel mode**, le applicazioni in **user mode**. Le funzionalità essenziali del kernel vengono messe in un **immagine** che viene eseguita al **boot** del sistema.
 
 ![](../../Images/Macro-Kernel.png)
 
-**Pros**
-- L'esecuzione dei servizi è la più **veloce possibile**. (User -> kernel & kernel -> user)
+**Vantaggi e Svantaggi**
+- **Vantaggi**: Esecuzione servizi **più veloce possibile** (user -> kernel / kernel -> user).
+- **Svantaggi**: Kernel **fragile**, se crasha **si blocca la CPU**, inoltre ha dimensione **enorme**, quindi le istruzioni da eseguire potrebbero non entrare in **CPU cache**, si ha un calo di prestazioni **significante**.
 
-**Cons**
-- Molto **fragile**. Un crash del kernel blocca la CPU.
-- Dimensione del kernel **enorme**.
-
-**Code Base UNIX**
-Con l'aumentare dei servizi la dimensione del kernel dei sistemi UNIX è cresciuta notevolmente. Esistono due soluzioni:
-- L'uso di **moduli caricabili**.
-- Creare un SO basato su **micro kernel**.
+**Dimensione Codebase UNIX**
+Con l'aumentare dei servizi è aumentata anche la **dimensione del kernel**.
+- Per allegerirne il peso si possono usare **moduli caricabili** o SO basati su **micro kernel**.
 
 **Moduli Caricabili**
-Sono dei file oggetto contenenti **funzionalità del kernel**. Sono disattivabili a tempo di esecuzione.
+**File oggetto** contententi funzionalità del kernel. Sono (dis)attivabili a **tempo di esecuzione**.
+- **Vantaggi**: La codebase del kernel diminuisce **notevolmente**, il crash di un modulo non blocca il sistema.
+- **Svantaggi**: Si ha una lieve perdita di prestazioni dovuta alla (dis)attivazione dei moduli.
 
-**Pros**
-- La dimensione base del kernel diminuisce **notevolmente**.
-- Un crash di un modulo non impalla il sistema.
+**Micro Kernel SO**
+In kernel mode vengono eseguiti solo i **servizi essenziali**. Il resto viene eseguito sotto forma di **server applicativo** in user mode. Essi comunicano tramite un **sistema a messaggi**.
+- **Kernel**: Mezzo di comunicazione per i **server**, scheduler CPU, gestore della memoria.
+- **Applicazioni**: Gestore del file system, tutti i driver dei vari dispositivi.
 
-**Cons**
-- Lieve perdita di prestazioni dovuta alla dis/attivazione dei moduli.
+**Vantaggi e Svantaggi**
+- **Vantaggi**: Facilità di estensione; nuovo servizio -> nuovo server, il kernel non viene toccato. Il kernel ha dimensioni **minori** ed è CPU cache friendly. L'SO è **robusto**, se muore un server **si crea un'altra istanza** mentre l'SO continua ad eseguire.
+- **Svantaggi**: Meno performante di un SO con architettura **macro kernel**.
 
-**SO Basato su Micro Kernel**
-Il kernel esegue soltanto i servizi **essenziali**. Il resto viene eseguito sotto forma di server applicativo che comunicano tra di loro tramite un **sistema a messaggi**.
-- **Kernel**.
+![](../../Images/Micro-Kernel.png)
+
+**Hybrid Kernel SO**
+Simile al micro kernel. I driver dei dispositivi vengono eseguiti in **kernel mode**.
+
+![](../../Images/Hybrid-Kernel.png)
+![](../../Images/MVMVH.png)
