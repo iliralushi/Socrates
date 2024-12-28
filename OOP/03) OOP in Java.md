@@ -229,4 +229,4 @@ $ java Esempio
 // Sono una SeicentoFamiliare e ho 6 posti
 ```
 
-![[../../Images/MemoriaJava.png]]
+![[MemoriaJava.png]]

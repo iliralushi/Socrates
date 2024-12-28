@@ -1,7 +1,7 @@
 **Stratificazione SO**
 Al giorno d'oggi un SO è progettato **per strati**. Ogni strato viene progettato sfruttando le funzionalità dello strato **precedente**. L'insieme di strati forma uno **stack software**.
 
-![](../../Images/Stack-Software.png)
+![](Stack-Software.png)
 
 **Contenuto Strato**
 Contiene l'implementazione di tutte le **funzionalità e strutture dati** necessarie per creare lo strato di livello superiore. Esse possono essere implementate in due modi:
@@ -14,8 +14,8 @@ Contiene l'implementazione di tutte le **funzionalità e strutture dati** necess
 3) I primi due step vengono riapplicati fino all'ultimo strato: le funzioni dello strato `m+1` vengono implementate usando le funzionalità **pubbliche** dello strato `m.` 
 
 
-![](../../Images/Strato-Funzionale.png)
-![](../../Images/Strato-Funzionale2.png)
+![](Strato-Funzionale.png)
+![](Strato-Funzionale2.png)
 
 **Vantaggi: Modularità**
 - **Nello Sviluppo**: Nel primo strato vengono implementate le funzionalità per **interfacciarsi con l'hardware** ed il secondo strato si appoggia alle funzionalità del primo.
@@ -31,7 +31,7 @@ L'uso di più strati comporta un **ritardo maggiore** nel servizio per via delle
 **Macro Kernel SO**
 I servizi vengono eseguiti in **kernel mode**, le applicazioni in **user mode**. Le funzionalità essenziali del kernel vengono messe in un **immagine** che viene eseguita al **boot** del sistema.
 
-![](../../Images/Macro-Kernel.png)
+![](Macro-Kernel.png)
 
 **Vantaggi e Svantaggi**
 - **Vantaggi**: Esecuzione servizi **più veloce possibile** (user -> kernel / kernel -> user).
@@ -55,10 +55,10 @@ In kernel mode vengono eseguiti solo i **servizi essenziali**. Il resto viene es
 - **Vantaggi**: Facilità di estensione; nuovo servizio -> nuovo server, il kernel non viene toccato. Il kernel ha dimensioni **minori** ed è CPU cache friendly. L'SO è **robusto**, se muore un server **si crea un'altra istanza** mentre l'SO continua ad eseguire.
 - **Svantaggi**: Meno performante di un SO con architettura **macro kernel**.
 
-![](../../Images/Micro-Kernel.png)
+![](Micro-Kernel.png)
 
 **Hybrid Kernel SO**
 Simile al micro kernel. I driver dei dispositivi vengono eseguiti in **kernel mode**.
 
-![](../../Images/Hybrid-Kernel.png)
-![](../../Images/MVMVH.png)
+![](Hybrid-Kernel.png)
+![](MVMVH.png)

@@ -1,6 +1,6 @@
 **Livello H2N - Stack TCP/IP**
 
-![](../../Images/H2N.png)
+![](H2N.png)
 
 **Scopo Livello H2N**
 Nello stack TCP/IP i protocolli H2N sono strettamente dipendenti tra di loro. Il loro scopo è:

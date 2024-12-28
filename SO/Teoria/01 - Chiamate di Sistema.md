@@ -2,12 +2,12 @@
 - **Sistema Operativo**: Composto dal **kernel** che fa da mediatore tra HW e applicazioni e dal **sistema di base** che permette all'SO di avviarsi e mostrare un'**interfaccia di testo**.
 - **Programmi Applicativi**: Tutto ciò che non è kernel/sistema di base.
 
-![](../../Images/SO.png)
+![](SO.png)
 
 **Interazione Applicazione-Kernel**
 Un'applicazione (di base o meno) invia una **richiesta** al kernel. Il kernel quindi invia una **risposta** all'applicazione. Viene usato il modello **client-server**.
 
-![](../../Images/App-Kernel.png)
+![](App-Kernel.png)
 
 **User Mode e Kernel Mode**
 - **User Mode**: Un'app in user mode ha **privilegi ridotti**. Non può alterare memoria di altre applicazioni o del kernel (esempio). **Protezione** contro usi maliziosi/sbadati.
@@ -43,7 +43,7 @@ Il valore di ritorno della funzione di servizio è salvato nel registro **eax**.
 **Libreria C**
 Invocare i servizi del kernel in questo modo è molto complicato. Linux usa la **GNU C Library**, una libreria wrapper, per facilitarne l'uso.
 
-![](../../Images/Wrapper-C.png)
+![](Wrapper-C.png)
 
 **Convenzioni di Chiamata**
 Convenzioni standard del C.
