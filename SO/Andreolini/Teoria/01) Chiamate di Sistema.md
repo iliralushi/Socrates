@@ -2,7 +2,7 @@
 - **Sistema Operativo**: È composto dal **kernel** che è un software ponte tra HW ed apps e dal **sistema di base** che permette all'SO di avviarsi e mostrare un'**interfaccia testuale**.
 - **Programmi Applicativi**: Tutto ciò che non è kernel o sistema di base.
 
-![](SO.png)
+![](Images/SO/SO.png)
 
 **Struttura Completa**
 Abbiamo una struttura **a guscio**.

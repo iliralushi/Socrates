@@ -1,7 +1,7 @@
 **Comandi**
 I comandi in UNIX sono suddivisi in **interni** ed **esterni**.
 - **Shell Builtin**: Compreso nella **shell**. Quando viene eseguito la shell esegue la funzione associata al comando senza caricare altro.
-- **External Command**: Compreso in un eseguibile esterno alla shell (**BASH**). Si trovano in una delle directory in `$PATH.` Alla sua esecuzione la shell esegue una nuova applicazione.
+- **External Command**: Compreso in un **eseguibile esterno** alla shell (**BASH**). Si trovano in una delle directory in `$PATH.` Alla sua esecuzione la shell esegue una nuova applicazione.
 
 **Help**
 `help` è un comando **builtin** che mostra documentazione sui comandi shell builtin.

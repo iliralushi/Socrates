@@ -1,23 +1,19 @@
-**Contesto SO Moderni**
-Un SO moderno è:
-- **Multiprogrammato**: Supporta più applicazioni in esecuzione contemporaneamente.
-- **Multiutente**: Più utenti possono usare la macchina contemporaneamente.
-- **Time Sharing**: Le applicazioni vengono eseguite **sequenzialmente** poco alla volta.
-
-Il kernel dell'SO deve saper gestire questi tre dettagli fondamentali.
-- Si usa un astrazione che prende nome di **processo**.
+**SO Moderno**
+- **Multiprogrammato**: Più applicazioni in esecuzione contemporaneamente.
+- **Multiutente**: Più utenti che possono usare il dispositivo contemporaneamente.
+- **Time Sharing**: I programmi vengono eseguiti **sequenzialmente** in piccole parti invece che tutti contemporaneamente.
 
 **Eseguibile vs Processo**
-- **Eseguibile**: È un file memorizzato su **hard disk**. Contiene il **codice macchina** da eseguire, aree di memoria e strumenti per il **debugging**. Non va in esecuzione da solo.
-- **Processo**: Rappresentazione del kernel, tramite **strutture dati** e **funzioni di gestione** del **programma eseguibile** in esecuzione.
+- **Programma Eseguibile**: Programma salvato su **storage device**. Contiene il **codice macchina**, alcune aree di memoria e delle funzione utili per il **debugging**. Non può andare in **esecuzione da solo**.
+- **Processo**: Rappresentazione del kernel in termini di **strutture dati** e **funzioni di gestione** di un **programma eseguibile in esecuzione**.
 
-**Rappresentazione**
-- **Strutture Dati**: Strutture dati dedicate a memorizzare lo **stato interno** di un processo. Puntatori alle risorse in uso come **aree di memoria** e **altri programmi aperti**.
-- **Funzioni di Gestione**: Creazione, terminazione, esecuzione di un programma eseguibile. Comunicazione e **sincronizzazione** tra processi.
+**Processo**
+- **Strutture Dati**: Rappresentazione di uno **stato interno** e puntatori a **risorse in uso** come aree di memoria o altri programmi.
+- **Funzioni di Gestione**: Creazione, terminazione, comunicazione e sincronizzazione dei processi. Esecuzione di un programma eseguibile.
 
-**Identificatore di Processo**
-Il **PID** è un numero univoco assegnato dal kernel ad ogni signolo processo creato.
-- Usa il tipo di dato `pid_t (int), ` è un numero **non negativo**, viene assegnato seguendo la formula `next_pid = (prev_pid + 1) % max_pid.` 
+**PID**
+Il PID è un **numero univoco** assegnato dal kernel per ogni singolo processo. È rappresentato dal tipo di dato `pid_t` che è un **intero non negativo**.
+- Viene assegnato seguendo la formula `next_pid = (prev_pid + 1) % max_pid.`
 
 **Stato Interno Processo**
 - **In Esecuzione**: Del codice sta venendo eseguito dalla CPU.
