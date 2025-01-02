@@ -15,99 +15,108 @@
 Il PID è un **numero univoco** assegnato dal kernel per ogni singolo processo. È rappresentato dal tipo di dato `pid_t` che è un **intero non negativo**.
 - Viene assegnato seguendo la formula `next_pid = (prev_pid + 1) % max_pid.`
 
-**Stato Interno Processo**
-- **In Esecuzione**: Del codice sta venendo eseguito dalla CPU.
-- **Bloccato**: In attesa di un evento, tipicamente ricevuta dati da una periferica.
-- **Pronto**: È finito un evento ed il processo è pronto per eseguire la sua esecuzione.
-- **Terminato**: Non c'è più codice da eseguire. Vengono **liberate le risorse** ed il processo viene **ucciso**.
+**Automa a Stati - Stato Interno**
+- **In Esecuzione**: La CPU sta eseguendo codice.
+- **Bloccato**: Attesa di un evento come il ricevimento di dati da una periferica.
+- **Pronto**: Si è verificato un evento. Il processo è pronto a ri/eseguire la sua esecuzione.
+- **Terminato**: Non c'è più codice da eseguire. Vengono liberate le risorse occupate e viene distrutto il processo
 
 ![](Automa-Stati.png)
 
-**Linux: In Esecuzione**
-Per Linux non c'è alcuna differenza di stato tra **pronto** ed **in esecuzione**. Sono entrambi catturati dallo stato `TASK_RUNNING.`
+**Linux: Esecuzione**
+Nei sistemi GNU/Linux gli stati **pronto** e **in esecuzione** vengono accorpati in `TASK_RUNNING.`
 
 **Linux: Comunicazione**
-Un processo può comunicare con gli altri sfruttando **segnali** come `CTRL+C` che è il segnale di interruzione del processo. Se si chiude un processo mentre sta ricevendo dati potrebbe rimanere in uno **stato inconsistente**. L'attesa è gestita tramite due stati:
-- `TASK_INTERRUPTIBLE` e `TASK_UNINTERRUPTIBLE.`
+Un processo può comunicare con altri tramite la ricezione e l'invio di **segnali**. Se il processo sta ricevendo dati da **una periferica** e viene chiuso (`segnale CTRL+C`) il kernel può rimanere in una **condizione instabile**.
+- L'attesa è gestita da due stati. `TASK_INTERRUPTIBLE` e `TASK_UNINTERRUPTIBLE`.
 
 **Linux: Sincronizzazione**
-Un processo può **creare altri processi** ed aspettare che essi terminano (`wait()`). Quando è terminato **salva il suo stato di uscita** in una struttura dati, così il processo padre lo riesce a leggere. L'uscita di un processo è divisa in due stati:
-- `EXIT_ZOMBIE:` Il processo creato **è morto**, le risorse non son state deallocate. Il processo creatore può leggerne lo stato di uscita.
-- `EXIT_DEAD:` Il creante ha letto lo stato di uscita, le risorse possono essere deallocate.
+Un processo può crearne un altro ed aspettare che finisca. Una volta terminato, esso salva **il suo stato di uscita** in una struttura dati, in modo che il processo creante lo possa leggere. Gli stati di uscita in Linux sono due:
+- `EXIT_ZOMBIE:` Il processo creato **è morto**, le sue risorse **non sono state deallocate**. Il processo creante è pronto a leggere lo stato di uscita.
+- `EXIT_DEAD:` Lo stato di uscita è stato letto dal processo creante, vengono deallocate le risorse utilizzate.
 
 **Linux: Debugging**
-- `TASK_STOPPED:` Il processo è stato fermato con CTRL+Z.
-- `TASK_TRACED:` Il processo è attualmente tracciato da un debugger.
+Il debugging di un processo in Linux è gestito in due stati:
+- `TASK_STOPPED:` Il processo è stato stoppato (`segnale CTRL+Z`).
+- `TASK_TRACED:` Il processo sta venendo tracciato da un debugger.
 
 ![](Automa-Stati-Linux.png)
 
-**Descrittore Processo**
-Quando viene creato un processo il kernel crea una scrittura dati detta **Process Control Block (PCB)** che contiene informazioni sullo **stato** e puntatori a **risorse prenotate**.
-- In Linux il PCB è definito dalla `struct task_struct.`
+**PCB**
+Quando viene creato un processo il kernel del SO crea una **struttura dati** detta **Process Control Block (PCB)** che contiene:
+- Puntatori alle risorse prenotate.
+- Informazioni di stato del processo.
 
 ![](PCB.png)
 
-**Creazione di Processi**
-Mentre è in esecuzione un processo può **CLONARE** (**forking**) altri processi. Al termine della clonazione il processo figlio è identico al processo padre.
-- Il processo **clonante** è il padre, il processo **clonato** è il figlio.
+**Linux: PCB**
+Il PCB in Linux è definito nella struttura dati `struct task_struct.`
 
-**fork()**
-Nei sistemi UNIX è la **chiamata di sistema** usata per clonare esattamente un processo. In Linux è implementata dalla funzione di servizio `do_fork().` Identifica le risorse da clonare per un singolo processo, clona le risorse con la funzione `copy_process().`
-- `do_fork()` è definita nel path `$LINUX/kernel/fork.c`
+**Creazione di Processi**
+Un processo in esecuzione può creare altri processi. Questo meccanismo è una **clonazione** di un processo, detta **forking**. Al termine del forking il processo **figlio** è identico al processo **padre**. Entrambi i processi riprendono **dall'istruzione successiva alla clonazione**.
+- **Processo Clonante**: Padre.
+- **Processo Clonato**: Figlio.
+
+**Chiamata di Sistema - fork()**
+In UNIX per clonare un processo si usa la chiamata di sistema `fork().` In Linux è definita dalla funzione di servizio `do_fork()` definita nel file `$LINUX/kernel/fork.c`
+- `do_fork()` identifica le risorse da clonare, la clonazione avviene tramite la funzione `copy_process().`
 
 ![](Fork.png)
 
 **Dopo la Clonazione**
-Al termine di `fork()` sia il processo padre che quello figlio continueranno l'esecuzione dell'istruzione dalla prossima. Distinguiamo i processi grazie a ciò che returna `fork().`
-- **Processo Padre**: Ritorna il PID del processo figlio.
-- **Processo Figlio**: Ritorna `0.`
-- **Errore**: Ritorna `-1.`
+Al termine del forking entrambi i processi riprendono l'esecuzione dall'ultima istruzione. Riusciamo a distinguere padre dal figlio grazie al valore di ritorno di `fork().`
+- -1 con **errore**, 0 se invocata su **processo figlio**, PID del figlio se invocata sul **padre**.
 
-**Organizzazione Processi in SO UNIX**
-L'organizzazione dei processi in UNIX è **ad albero**. 
-1) `init` è un qualsiasi processo iniziale creato **a mano dal kernel**, ha sempre 1 come PID.
-2) `init` fa partire i servizi forniti dal PC tramite `fork` ed `exec` come `getty` che è il **gestore dei login** su console.
-3) Al termine del login `getty` fa partire una shell (**BASH**).
+**Organizzazione Processi UNIX**
+SO UNIX hanno l'organizzazione dei processi **ad albero**.
+1) Un processo iniziale `init` viene creato manualmente dal kernel. Ha sempre 1 come PID.
+2) `init` fa partire servizi del kernel tramite `fork()` ed `exec().` Uno dei servizi è `getty` che è il **gestore del login su console.**
+3) `getty` una volta loggati fa partire la shell `bash` che esegue `ls.`
 
 ![](Albero-Processi.png)
 
-**Esecuzione di Programmi Eseguibili**
-`fork()` non carica altri programmi. Il caricamento è gestito dalla chiamata di sistema `execve()` che sostituisce efficientemente le aree codice/dati di un processo.
+**Esecuzione Programmi**
+`fork()` si occupa solo di clonare processi. I programmi vengono caricati tramite la funzione `execve().`
 
-**Usi Buoni del Forking**
-Solitamente si usa per creare comandi **composti** in pipeline.
+**Come Usare Forking**
+Solitamente si usa per creare comandi **composti in pipeline**.
 - `find . -name \*.c | wc -l`
 
-**Usi Cattivi del Forking**
-Una **fork bomb** è un processo speciale che riproduce processi figli all'infinito. **È ricorsivo** quindi anche i figli creano figli. Meccanismo utilizzato per DDoS.
-- Il kernel impone un **tetto massimo** di processi creabili. Una volta raggiunto non si possono creare altri processi, a quel punto la macchina sarà inutilizzabile, i processi consumano risorse, quindi rallentano.
+![](Pipeline-Comando.png)
+
+**Fork Bomb - Bad Forking**
+Una **fork bomb** è un processo che riproduce processi figli **ricorsivamente** all'infinito. È un processo **speciale** e viene usato per i **Denial of Service (DoS)**.
+- Ogni processo creato **consuma risorse** e rallenta la macchina. Il kernel **impone** un tetto di processi **massimi eseguibili** in un momento e una volta raggiunto il numero non parte più nessuna applicazione.
 
 ![](Forkbomb.png)
 
 **Terminazione Processi**
-La chiamata di sistema `exit()` termina un processo in maniera pulita.
+La chiamata di sistema `exit()` termina un processo.
 1) Mette il processo in stato `EXIT_ZOMBIE.`
-2) Attende la lettura del codice di uscita da parte del processo padre.
-3) Libera le risorse utilizzate.
+2) Attende la lettura del suo stato di uscita dal processo padre.
+3) Svuota gli stream aperti e gestisce i segnali.
 4) Mette il processo in stato `EXIT_DEAD.`
-5) Distrugge il PCB.
-6) **Schedula** l'esecuzione di un altro processo.
+5) Libera le risorse prenotate.
+6) Elimina il PCB.
+7) Schedula l'esecuzione di un altro processo.
 
 **Processi Orfani e Child Reaping**
-Se un processo genitore termina i suoi figli diventano **orfani**.
-- **Reparenting**: Il meccanismo dove gli **orfani** diventano figli del processo `init.`
+Se un processo genitore **termina** i suoi figli diventano **orfani**.
+- **Reparenting**: Il processo orfano diventa **figlio del processo** `init.`
 
-**Organizzazione per Gruppi**
-Ogni comando inputtato nella **shell** crea un **gruppo** di processi individuato da un **ID di gruppo** detto **PGID** pari all'ID del primo processo in **pipeline** detto **process group leader**.
-- In questo modo è possibile inviare un segnale al leader per uccidere tutti i processi coinvolti in un comando. Per il comando `ls -al | grep .bash | less -Mr` abbiamo:
+**Process Group**
+Ogni comando usato nella shell crea un **gruppo di processi** identificato dal **PGID** che è un **identificatore di gruppo**. È pari al PID del **primo** processo nella pipeline. In questo modo è possibile inviare segnali a **tutti** i processi del gruppo (**process group leader**).
+- `Rappresentazione per ls -al | grep .bash | less -Mr.`
 
 ![](Organizzazione-Gruppi.png)
 
-**Organizzazione per Sessioni**
-Una **sessione** è un insieme di gruppi di processi che condividono un **terminale di controllo** come il terminale di login. È individuata tramite **ID di sessione** (**SID**). L'ID di sessione è quello del **session leader**, il processo che crea la sessione con la chiamata di sistema `setsid().`
+**Session**
+Una **sessione** è un **insieme** di gruppi di processi che condividono lo stesso terminale che può essere **terminale di login (tty)** o **pseudo-terminale**. Una sessione è individuata da ID sessione detto **SID**. L'ID di sessione è il PID del processo, **session leader**, il processo che crea la sessione tramite la chiamata di sistema `setsid().`
 
 **Gruppo in Foreground e Background**
-In ogni istante solo un gruppo di processi può leggere dal terminale. Il gruppo prende nome di **foreground process group**. Gli altri gruppi di processi che non godono di questa proprietà prendono il nome di **background process group**.
+Ad ogni istante, **solo un gruppo di processi** può leggere dal terminale. Prendono il nome di **foreground process group**. Gli altri gruppi di processi non hanno questa proprietà, hanno il nome di **background process group**.
+- **Background**: `ls -lR / > out.txt 2>err.txt &`
+- **Foreground**: `ls -lR / > out.txt 2>err.txt`
 
 ``` BASH
 echo $$
